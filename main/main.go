@@ -21,7 +21,6 @@ type Account struct {
 
 func main() {
 	http.HandleFunc("/", loadHome)
-	makeDb()
 	readDb()
 	http.ListenAndServe(":8080", nil)
 }
@@ -44,15 +43,16 @@ func readDb() {
 	defer sessionState.Close()
 
 	reader := sessionState.DB("bank")
-	var user = "joyceL"
+	//var user = "joyceL"
 	var d bson.D
 	//var d []Account
 
 	coll := reader.C("Bank")
 	//err = coll.Find(bson.M{"user": user}).All(&d)
-	err = coll.Find(bson.M{"user": user}).Select(nil).One(&d)
+	err = coll.Find(bson.M{ "user": "JoyceL" }).Select(bson.M{"user": 0, "pass": 0}).One(&d)
 	fmt.Println("getting data")
 	if err != nil {
+		fmt.Println("Query Error")
 		panic(err)
 	}
 
