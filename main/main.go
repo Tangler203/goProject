@@ -1,4 +1,4 @@
-package main
+package dbs
 
 import (
 	"fmt"
@@ -11,16 +11,17 @@ import (
 
 type Account struct {
 	//Id           bson.ObjectId 'bson:"_id,omiyempty"'
-	name         string
-	number       int
-	amount       float32
-	creditRating string
-	user         string
-	pass         string
+	Name         string
+	Number       int
+	Amount       float32
+	CreditRating string
+	User         string
+	Pass         string
 }
 
 func main() {
 	http.HandleFunc("/", loadHome)
+	makeDb()
 	readDb()
 	http.ListenAndServe(":8080", nil)
 }
