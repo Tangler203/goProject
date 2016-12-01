@@ -39,8 +39,8 @@ func makeDb() {
 	coll.RemoveAll(nil)
 	err = coll.Insert(&Account{Name: "Liam Joyce", Number: 12345678, Amount: 2000.95, CreditRating: "Good", User: "JoyceL", Pass: "78ad45"} ,
 	&Account{Name: "Edel Shaw", Number: 60985521, Amount: 7742.99, CreditRating: "Good", User: "YellowSquare", Pass: "DaisyB00k"},
-	&Account{Name: "Liam Joyce", Number: 12345678, Amount: 2000.95, CreditRating: "Good", User: "JoyceL", Pass: "78ad45"} ,
-	&Account{Name: "Liam Joyce", Number: 12345678, Amount: 2000.95, CreditRating: "Good", User: "JoyceL", Pass: "78ad45"})
+	&Account{Name: "Michael Sheehan", Number: 46872439, Amount: 1078, CreditRating: "Poor", User: "sheehan87", Pass: "password"} ,
+	&Account{Name: "Lilly Jones", Number:77896235, Amount: 5050.50, CreditRating: "Good", User: "LJones", Pass: "050690"})
 	if err != nil {
 		fmt.Println("Insert error")
 		panic(err)
@@ -48,10 +48,13 @@ func makeDb() {
 
 	// Query One
 	result := Account{}
-	err = coll.Find(bson.M{ "user": "JoyceL" }).Select(bson.M{"name": 1, "user": 1}).One(&result)
+	
+	err = coll.Find(bson.M{ "user": "JoyceL" }).Select(bson.M{"user": 0, "pass": 0}).One(&result)
 	if err != nil {
 		fmt.Println("Query Error")
 		panic(err)
 	}
-	fmt.Println(result)
+	
+	fmt.Println("Account Number:" , result.Number)
+
 }
