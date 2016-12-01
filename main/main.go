@@ -1,10 +1,11 @@
-package dbs
+package main
 
 import (
 	"fmt"
 	"html/template"
 	"net/http"
 
+	"gopkg.in/macaron.v1"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -20,9 +21,11 @@ type Account struct {
 }
 
 func main() {
-	http.HandleFunc("/", loadHome)
-	readDb()
-	http.ListenAndServe(":8080", nil)
+	m := macaron.Classic()
+	m.Get("/", func() string {
+		return readDb().Name
+	})
+	m.Run()
 }
 
 func loadHome(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +36,7 @@ func loadHome(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 }
 
-func readDb() {
+func readDb() Account {
 	sessionState, err := mgo.Dial("127.0.0.1:27017")
 
 	if err != nil {
@@ -43,18 +46,15 @@ func readDb() {
 	defer sessionState.Close()
 
 	reader := sessionState.DB("bank")
-	
 	d := Account{}
 
 	coll := reader.C("Bank")
-	
-	err = coll.Find(bson.M{ "user": "JoyceL" }).Select(bson.M{"user": 0, "pass": 0}).One(&d)
-	//fmt.Println("getting data")
+
+	err = coll.Find(bson.M{"user": "JoyceL"}).Select(bson.M{"user": 0, "pass": 0}).One(&d)
 	if err != nil {
 		fmt.Println("Query Error")
 		panic(err)
 	}
+	return d
 
-	fmt.Println(d.User)
-		
 }
