@@ -43,32 +43,18 @@ func readDb() {
 	defer sessionState.Close()
 
 	reader := sessionState.DB("bank")
-	//var user = "joyceL"
-	var d bson.D
-	//var d []Account
+	
+	d := Account{}
 
 	coll := reader.C("Bank")
-	//err = coll.Find(bson.M{"user": user}).All(&d)
+	
 	err = coll.Find(bson.M{ "user": "JoyceL" }).Select(bson.M{"user": 0, "pass": 0}).One(&d)
-	fmt.Println("getting data")
+	//fmt.Println("getting data")
 	if err != nil {
 		fmt.Println("Query Error")
 		panic(err)
 	}
 
-	for i, elem := range d {
-		//if elem == "Liam Joyce" {
-		i++
-		fmt.Println(elem)
-
-		//fmt.Println("Done")
-		//return
-		//else{
-		//fmt.Println(elem.Name, elem.Value, i)
-		//}
-
-		//acc.name = elem.name
-		//fmt.Println(acc.name, i)
-	}
-	//fmt.Println(d)
+	fmt.Println(d.User)
+		
 }
