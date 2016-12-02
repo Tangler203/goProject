@@ -35,12 +35,13 @@ func login(ctx *macaron.Context, req *http.Request) {
 	var password string
 	err := req.ParseForm()
 	if err != nil {
+		panic(err)
+	}
+	username = req.FormValue("user")
+	password = req.FormValue("password")
+	if username == "" {
+
 		fmt.Println("No input written")
-		username = "JoyceL"
-		password = "78ad45"
-	} else {
-		username = req.FormValue("user")
-		password = req.FormValue("password")
 	}
 
 	results := readDb(username, password)
@@ -67,7 +68,7 @@ func readDb(username string, password string) Account {
 
 	coll := reader.C("Bank")
 	fmt.Println(username, " : ", password)
-	err = coll.Find(bson.M{"user": username}).Select(bson.M{"name": 1, "number": 1, "amount": 1, "creditrating": 1, "user": 1, "pass": 1}).One(&d)
+	err = coll.Find(bson.M{"user": username, "pass": password}).Select(bson.M{"name": 1, "number": 1, "amount": 1, "creditrating": 1, "user": 1, "pass": 1}).One(&d)
 	if err != nil {
 		fmt.Println("Query Error")
 		panic(err)
