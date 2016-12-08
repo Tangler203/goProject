@@ -6,7 +6,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-func makeDb() {
+/*func makeDb() {
 	sessionState, err := mgo.Dial("127.0.0.1:27017")
 
 	if err != nil {
